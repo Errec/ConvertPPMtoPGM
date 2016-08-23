@@ -1,35 +1,59 @@
-// [123 234 206 14 81 220]  [123 123 123 206 206 206] 
-// [22 208  198 192 51 99]  [22  22   22 192 192 192]
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
-#define MAX_NAME_SIZE 100
+#define MAX_FILENAME_SIZE 100
 
-int main(int argC, char *argV[]){
-
+int main(int argC, char *argV[]) {
+	FILE *handler;
+	char *buffer = NULL;
 	int index = 0;
 	int lines = 0;
 	int columns = 0;
+	bool done = false;
 	// Alocate memory + check for null
-	char *fileName = malloc (MAX_NAME_SIZE);
+	char *fileName = malloc (MAX_FILENAME_SIZE);
     if (fileName == NULL) {
         printf ("No memory\n");
         return 1;
     }
 	printf("\n\nEnter the Name of the Image File:");
 
-	// using fgets() for buffer overflow protection - reference http://stackoverflow.com/a/3302594
-	fgets(fileName, MAX_NAME_SIZE, stdin);
+	while (!done) {
+		// using fgets() for buffer overflow protection - reference http://stackoverflow.com/a/3302594
+		fgets(fileName, MAX_FILENAME_SIZE, stdin);
 
-	// Remove new line, if we get one
-	index = strlen(fileName)-1;
-	if( fileName[index] == '\n') {
-	  fileName[index] = '\0';
+		// Remove new line, if we get one
+		index = strlen(fileName)-1;
+		if( fileName[index] == '\n') {
+		  fileName[index] = '\0';
+		}
+
+		handler = fopen(fileName, "r");
+
+		if(strcmp("Q",fileName) == 0) {
+			printf("\n...End of program...\n");
+			exit(1);
+		}
+		else {
+			if(handler == NULL) {
+				fprintf(stderr, "\nFile not found! Try again or Q to quit:");
+			}
+			else {
+				done = true;
+			}
+		}	
 	}
 
-	printf("This is your file: %s", fileName, "\n");
+	printf("This is your file: %s", fileName);
+
+
+	for(int i = 0; i < 9; i ++) {
+		printf("%c", fgetc(handler));
+	}
+
+	//buffer = (char*) malloc(sizeof(char) * (string_size + 1));
 
 	int imgOriginal[2][6] = {{123, 234, 56, 14, 81, 220} , 
 							 {22, 208, 198, 192, 51, 99}};
