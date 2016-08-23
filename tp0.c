@@ -13,8 +13,8 @@ int main(int argC, char *argV[]) {
 	int columns = 0;
 	bool done = false;
 	// Alocate memory + check for null
-	char *fileName = malloc (MAX_FILENAME_SIZE);
-    if (fileName == NULL) {
+	char *ppmFileName = malloc (MAX_FILENAME_SIZE);
+    if (ppmFileName == NULL) {
         printf ("No memory\n");
         return 1;
     }
@@ -22,17 +22,17 @@ int main(int argC, char *argV[]) {
 
 	while (!done) {
 		// using fgets() for buffer overflow protection - reference http://stackoverflow.com/a/3302594
-		fgets(fileName, MAX_FILENAME_SIZE, stdin);
+		fgets(ppmFileName, MAX_FILENAME_SIZE, stdin);
 
 		// Remove new line, if we get one
-		index = strlen(fileName)-1;
-		if( fileName[index] == '\n') {
-		  fileName[index] = '\0';
+		index = strlen(ppmFileName)-1;
+		if( ppmFileName[index] == '\n') {
+		  ppmFileName[index] = '\0';
 		}
 
-		handler = fopen(fileName, "r");
+		handler = fopen(ppmFileName, "r");
 
-		if(strcmp("Q",fileName) == 0) {
+		if(strcmp("Q",ppmFileName) == 0) {
 			printf("\n...End of program...\n");
 			exit(1);
 		}
@@ -46,15 +46,38 @@ int main(int argC, char *argV[]) {
 		}	
 	}
 
-	printf("This is your file: %s", fileName);
 
 
-	for(int i = 0; i < 9; i ++) {
-		printf("%c", fgetc(handler));
-	}
+
+
+
+
+
+    char line[50] = "";
+    char s1[200] = "";
+    char s[200] = "";
+
+    while ( fgets(line, sizeof line, handler) )
+    {
+        if (*line == '#')
+            continue;
+        strcat(s , line);
+    }
+
+
+    printf("%s",s);
+
+
+
+
+
+
+
+    fclose(handler);
 
 	//buffer = (char*) malloc(sizeof(char) * (string_size + 1));
 
+	/*
 	int imgOriginal[2][6] = {{123, 234, 56, 14, 81, 220} , 
 							 {22, 208, 198, 192, 51, 99}};
 	// TODO: malloc: int imgBW[3];
@@ -73,9 +96,9 @@ int main(int argC, char *argV[]) {
 			printf("%d  ",imgOriginal[i][j+2]);
 		}
 		printf("\n");
-	}
+	} */
 	
-	free (fileName);
+	free (ppmFileName);
 	return 0;
 	// TODO: convertRGBToBW(int R, int G, int B);
 	// TODO: writePGM();
