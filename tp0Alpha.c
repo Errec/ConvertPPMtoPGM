@@ -128,18 +128,19 @@ int main(int argC, char *argV[]) {
 		}
     }
     ppmCopy[strlen(ppmCopy) - 1] = '\0';
-    printf("\n%s\n",ppmCopy);
+    //printf("\n%s\n",ppmCopy);
 
 
     // -----------------------------------------END of part 2 ------------------------------------------------------------
     // 
-    // ----------------------------------------- Part 3: convert the result string using the grayscale method -----------------
+    // ----------------------------------------- Part 3: convert the result string using the grayscale equation -----------------
     int totalNumberOfColorValues = pxlCountX * 3 * pxlCountY;
+    int totalNumberOfChar = pxlCountX * 4 * pxlCountY;
     char* token;
     //int *ppmCopyIntArray = (int *)malloc(totalNumberOfColorValues);
     //char *pgmMatrix = (char *)malloc(pxlCountX * pxlCountY * 3 + 1);
     int ppmCopyIntArray[totalNumberOfColorValues];
-    char pgmMatrix[10000];
+    char pgmMatrix[totalNumberOfChar];
 	token = strtok(ppmCopy," ");   //think of it as substring, the part of the str before the comma
 	for (int i = 0; i < totalNumberOfColorValues; i++)
 	{
@@ -153,29 +154,38 @@ int main(int argC, char *argV[]) {
 	double bwValue;
 	int bwTemp;
 
-	for (int i = 0; i < pxlCountX * pxlCountY * 3 - 2; i = i + 3)
+	for (int i = 0; i < pxlCountX * pxlCountY * 3; i += 3)
 	{
-		bwValue = ((49.0 / 255.0) * ((0.3 * (double)ppmCopyIntArray[i]) + (0.59 * (double)ppmCopyIntArray[i + 1]) + (0.11 * (double)ppmCopyIntArray[i + 2])));
+		bwValue = ((49.0 / 255.0) * ((0.3 * (double)ppmCopyIntArray[i]) + 
+									 (0.59 * (double)ppmCopyIntArray[i + 1]) + 
+									 (0.11 * (double)ppmCopyIntArray[i + 2])));
 		bwTemp = bwValue;
-		sprintf(str, "%d ", bwTemp);
-		strcat(pgmMatrix,str);
 
+
+		//printf("%d mod %d = %d \n",i, pxlCountX * 3, (i  % (pxlCountX * 3)));
 		// strcpy(str, "  "); // duvida
 		
-		if (i % (pxlCountX * 3 - 3) == 0)
+		if (i != 0 && i % (pxlCountX * 3) == pxlCountX * 3 - 3)
 		{
-			strcat(pgmMatrix,"\n");
+			sprintf(str, "%d\n", bwTemp);
+			strcat(pgmMatrix,str);
+		}
+		else {
+			sprintf(str, "%d ", bwTemp);
+			strcat(pgmMatrix,str);
 		}
 	}
 
-	printf("%s" , pgmMatrix);
+	pgmMatrix[strlen(pgmMatrix) - 1] = '\0';
+
+	// printf("%s\n" , pgmMatrix);
     // -----------------------------------------END of part 3 ------------------------------------------------------------
     //
   	//----------------------------------------Part 4 : open a new file and check -------------------------------------
 
     FILE *fp;
     //open file for output
-    fp = fopen("teste.ppm", "wb");
+    fp = fopen("teste.pgm", "wb");
     // -----------------------------------------END of part 4 ------------------------------------------------------------
     // 
   	//--------------------------part 5: write the converted array -------------------------------------------
@@ -193,9 +203,9 @@ int main(int argC, char *argV[]) {
     fprintf(fp, "%d %d\n",pxlCountX,pxlCountY);
 
     // rgb component depth
-    fprintf(fp, "%d\n",maxColor); // TODO new file color 50
+    fprintf(fp, "%d\n",49); // TODO new file color 50
 	
-    fprintf(fp, "%s\n",ppmCopy); // TODO new file matrix
+    fprintf(fp, "%s",pgmMatrix); // TODO new file matrix
 
 	fclose(fp);
 
