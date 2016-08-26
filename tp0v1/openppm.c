@@ -13,38 +13,38 @@
 
 #define MAX_FILENAME_SIZE 50
 
-FILE openFileFromKeyboardInput(FILE *handler) {
+FILE openPPMFileKeyboardInput(FILE *handler) {
 
-	bool done = false; // while loop confirmation
+	bool done = false; // while loop check
 	int index; // used in the file name array
 
 	char *ppmFileName = malloc (MAX_FILENAME_SIZE);
     if (ppmFileName == NULL) {
         printf ("No memory\n");
-        return 1;
+        exit(1);
     }
 
-	printf("\n\nEnter the Name of the Image File:");
+	printf("\n\nEnter the Name of the PPM Image File:");
 
 	while (!done) {
 		
 		fgets(ppmFileName, MAX_FILENAME_SIZE, stdin); // using fgets() for buffer overflow protection - reference http://stackoverflow.com/a/3302594
 
 		// Remove new line, if we get one from the user
-		index = strlen(ppmFileName)-1;
-		if( ppmFileName[index] == '\n') {
+		index = strlen(ppmFileName) - 1;
+		if(ppmFileName[index] == '\n') {
 		  ppmFileName[index] = '\0';
 		}
 
 		handler = fopen(ppmFileName, "rb"); 
 
-		if(strcmp("Q",ppmFileName) == 0 || strcmp("q",ppmFileName) == 0) { 
+		if(strcmp("Q", ppmFileName) == 0 || strcmp("q", ppmFileName) == 0) { 
 			printf("\n...End of program...\n");
 			exit(1);
 		}
 		else {
 			if(handler == NULL) {
-				fprintf(stderr, "\nFile not found! Try again or Q to quit:");
+				fprintf(stderr, "\nFile not found! Try again or (Q)Quit:");
 			}
 			else {
 				done = true;

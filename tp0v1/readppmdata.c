@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "header.h"
 
 char extractRGBvalues(FILE *handler) {
@@ -19,9 +18,9 @@ char extractRGBvalues(FILE *handler) {
     int pxlCountY;	// number of pixels in Y
     int maxColor;	// color depth
     int headLinesNum = 3;	// max number of lines presents in a head without comments or empty lines
-    char linebuf[20];	// keep the head lines information
     int colorDataLineCount = 1; //  used to check when the color array begins
     int matrixLineSize = pxlCountX * 4 * 3;	// number of chars in a line of the color matrix
+    char linebuf[20];	// keep the head lines information
 
     /* check if the image format is valid */
     while ( fgets(linebuf, sizeof linebuf, handler)
@@ -41,16 +40,16 @@ char extractRGBvalues(FILE *handler) {
 					}
 					break;
 
-				case 2 :
-					sscanf (linebuf,"%d %d",&pxlCountX,&pxlCountY);
+				case 2 :	// check the pixel density XY
+					sscanf (linebuf, "%d %d", &pxlCountX,&pxlCountY);
 					if (pxlCountX == 0 || pxlCountY == 0) {
 						fprintf(stderr, "Invalid image format.\n");
 						exit(1);
 					}
 					break;
 
-				case 3 :
-					sscanf (linebuf,"%d",&maxColor);
+				case 3 :	// check the default color depth 0-255
+					sscanf (linebuf, "%d", &maxColor);
 					if (maxColor <= 0 || maxColor > 255) {
 						fprintf(stderr, "Invalid image format.\n");
 						exit(1);
@@ -85,11 +84,11 @@ char extractRGBvalues(FILE *handler) {
 				currentLine[strlen(currentLine) - 1] = ' ';
 				strcat(ppmCopy,currentLine);
 			}
-			colorDataLineCount++;
+			colorDataLineCount++; // update the current line in the loop
 		}
     }
     
-    ppmCopy[strlen(ppmCopy) - 1] = '\0';
+    ppmCopy[strlen(ppmCopy) - 1] = '\0';	// insert end of string in the last position
 
     return ppmCopy;	// return a array with all the original RGB colors
 }

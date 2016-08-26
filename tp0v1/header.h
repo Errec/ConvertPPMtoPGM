@@ -1,10 +1,10 @@
 #ifndef FUNCTIONS_H_INCLUDED
 #define FUNCTIONS_H_INCLUDED
 
-FILE openFileFromKeyboardInput(FILE *handler); 
-char extractRGBvaluesFromFile(FILE *handler);
-char convertToBW(char ppmCopy);
-FILE saveNewFile(FILE *handler);
-void printBWdataToFile(FILE *handler);
+FILE openPPMFileKeyboardInput(FILE *handler); 
+char extractRGBvalues(FILE *handler);
+char convertToBW(char ppmCopy, int pxlCountX, int pxlCountY, int maxColor);
+FILE savePGMFileKeyboarInput(FILE *handler);
+void printBWdataToFile(FILE *handler, char *pgmMatrix, int pxlCountX, int pxlCountY);
 
 #endif
