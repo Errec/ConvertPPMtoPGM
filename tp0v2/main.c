@@ -2,11 +2,11 @@
  * PPM to PMG image converter
  *
  * Tested with GCC
- * 
+ *
  * Created: 22/08/2016
  *
  * Author: Raniro Coelho - errecme@gmail.com
- * 
+ *
  * https://github.com/Errec/AEDStp0
  */
 
@@ -17,10 +17,13 @@
 
 int main(int argC, char *argV[]) {
 
-    FILE *image;
+  void openPPMFileKeyboardInput();
+  void extractRGBvalues();
+  void convertToBW();
+  void savePGMFileKeyboarInput();
+  void printBWdataToFile();
+  printf("\n\tConversion complete...");
+  getchar();
 
-    printf("\n\tConversion complete...");
-    getchar();
-
-return 0;
+  return 0;
 }
